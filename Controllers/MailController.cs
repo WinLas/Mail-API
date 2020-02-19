@@ -23,13 +23,16 @@ namespace Mail_API.Controllers
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
+            //Filtrera värden via query-parametrar
             return "value";
         }
 
         // POST: api/Mail
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Mail value)
         {
+            //Ta emot och spara till databasen
+            //Skicka svar tillbaka med status på anrop och mail-ID
         }
 
         // PUT: api/Mail/5
