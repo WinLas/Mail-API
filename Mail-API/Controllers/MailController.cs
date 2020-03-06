@@ -51,41 +51,13 @@ namespace Mail_API.Controllers
        {
            if (value.IsValid())
            {
-               // Setup the email recipients.
-               var oDestination = new Destination();
-               List<string> emailList = new List<string> { value.Receiver };
-               oDestination.ToAddresses = emailList;
-
-               // Create the email subject.
-               var oSubject = new Content();
-               oSubject.Data = "subject";
-               
-               // Create the email body.
-               var oTextBody = new Content();
                string trackingId = Guid.NewGuid().ToString();
-               value.TrackerId = trackingId;
-               string imageHtml = "<img src='"+ Request.Scheme + "://" + Request.Host + Request.PathBase + Url.Action("getPixel","Track", new {trackingId = trackingId})+"'>";
-               oTextBody.Data = value.Body+imageHtml;
-               var oBody = new Body();
-               oBody.Html = oTextBody;
-
-               // Create and transmit the email to the recipients via Amazon SES.
-               var oMessage = new Message();
-               oMessage.Body = oBody;
-               oMessage.Subject = oSubject;
-               SendEmailResponse reply = null;
-               var request = new SendEmailRequest();
-               request.Source = value.Sender;
-               request.Destination = oDestination;
-               request.Message = oMessage;
-               using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
-               {
-                    reply = await client.SendEmailAsync(request);
-                    value.ExternalId = reply.MessageId;
-                    _context.Mails.Update(value);
-                    _context.SaveChanges();
-               } 
-               return Ok(reply);
+               value.TrackerId = trackingId; 
+               string imageHtml = "<img src='" + Request.Scheme + "://" + Request.Host + Request.PathBase + Url.Action("getPixel", "Track", new { trackingId = trackingId }) + "'>";
+               value.Body = value.Body + imageHtml;
+               _context.Mails.Update(value);
+               _context.SaveChanges();
+               return Ok(value.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");
        }
