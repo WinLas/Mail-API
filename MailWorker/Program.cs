@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mail_API.Models;
 using Mail_API.Models.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,8 @@ namespace MailWorker
                     services.AddHostedService<Worker>();
                     var optionsBuilder = new DbContextOptionsBuilder<MailDbContext>();
                     optionsBuilder.UseSqlServer(hostContext.Configuration.GetSection("connectionStrings").GetSection("sqlConnection").Value);
-                    services.AddSingleton(new MailDbContext(optionsBuilder.Options));
+                    
+                    services.AddSingleton(new EmailService(new MailDbContext(optionsBuilder.Options)));
                 });
 
     }//hostContext.Configuration.GetSection("sqlConnection").ToString()

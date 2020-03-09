@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Amazon;
-using Amazon.SimpleEmail;
-using Amazon.SimpleEmail.Model;
 using Mail_API.Filters;
 using Mail_API.Models;
 using Mail_API.Models.Db;
@@ -19,30 +14,31 @@ namespace Mail_API.Controllers
     {
 
         private readonly MailDbContext _context;
+        private readonly EmailService _service;
 
-        public MailController(MailDbContext context)
+        public MailController(MailDbContext context, EmailService service)
     {
         _context = context;
+        _service = service;
     }
         // GET: api/Mail
         [HttpGet]
-      //  public IEnumerable<Mail> Get()
-      public async Task<IActionResult> Get()
-       {
-            var arr = _context.Mails.ToList();
-             return Ok(arr);
-        }
+        public async Task<IActionResult> Get()
+      {
+          var mails = _service.GetAllMails();
+          return Ok(mails);
+      }
 
         // GET: api/Mail/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<IActionResult> Get(Mail mail)
         {
-            var dbMail = _context.Mails.FirstOrDefault(m => m.Id.Equals(mail.Id));
-           if(dbMail == null)
-           {
+            var dbMail = _service.GetById(mail);
+            if(dbMail == null)
+            {
                return NotFound("The email with given id could not be found.");
-           }
-           return Ok(dbMail);
+            }
+            return Ok(dbMail);
         }
 
         // POST: api/Mail
@@ -51,12 +47,12 @@ namespace Mail_API.Controllers
        {
            if (value.IsValid())
            {
-               string trackingId = Guid.NewGuid().ToString();
-               value.TrackerId = trackingId; 
-               string imageHtml = "<img src='" + Request.Scheme + "://" + Request.Host + Request.PathBase + Url.Action("getPixel", "Track", new { trackingId = trackingId }) + "'>";
-               value.Body = value.Body + imageHtml;
-               _context.Mails.Update(value);
-               _context.SaveChanges();
+                string trackingId = Guid.NewGuid().ToString();
+                value.TrackerId = trackingId; 
+                string imageHtml = "<img src='" + Request.Scheme + "://" + Request.Host + Request.PathBase + Url.Action("getPixel", "Track", new { trackingId = trackingId }) + "'>";
+                value.Body = value.Body + imageHtml;
+                _context.Mails.Add(value);
+                _context.SaveChanges();
                return Ok(value.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");
@@ -66,22 +62,20 @@ namespace Mail_API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(Mail mail)
         {
-            var dbMail = _context.Mails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
+            var dbMail = _service.UpdateMail(mail);
             if (dbMail == null)
             {
                 return NotFound("The email with given id could not be found.");
             }
-            dbMail.Status = (MailStatus) 2;
-            dbMail.ErrorStatus = mail.ErrorStatus;
-            _context.Mails.Update(dbMail);
-            _context.SaveChanges();
+
             return Ok(dbMail);
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
+    /*    [HttpDelete("{id}")]
         public void Delete(int id)
         {
         }
+        */
     }
 }

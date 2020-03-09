@@ -1,6 +1,7 @@
 using System;
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
+using Mail_API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Mail_API.Models.Db;
+using IAmazonSimpleEmailService = Amazon.SimpleEmail.IAmazonSimpleEmailService;
 
 
 namespace Mail_API
@@ -34,6 +36,7 @@ namespace Mail_API
                 Convert.FromBase64String(this.Configuration.GetValue<String>("Response:PixelContentBase64")),
                 this.Configuration.GetValue<String>("Response:PixelContentType")
         ));
+            services.AddScoped<EmailService>();
             services.AddControllers(); 
             services.AddMvc();
 }

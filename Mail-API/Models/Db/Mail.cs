@@ -1,9 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Channels;
 
 namespace Mail_API.Models.Db
 {
@@ -29,22 +24,7 @@ namespace Mail_API.Models.Db
         {
             return !string.IsNullOrEmpty(Body) && !string.IsNullOrEmpty(Receiver) && !string.IsNullOrEmpty(Sender);
         }
-
-
-        /*  public bool validate()
-          {
-              //Ny funktion för validering av fält
-              //Validera CreatedTime inte större än now() - är createdtime null sätt den till now
-              //Hämta IP-adressen från anropet och spara den till IPAdress
-              //Validera mailaddresserna
-              return true;
-          }
-          */
     }
-
-
-
-
 }
 
 namespace Mail_API
