@@ -33,8 +33,7 @@ namespace MailWorker
                 {
                     _logger.LogError(e, "fel");
                 }
-           
-
+                
                 await Task.Delay(15000, stoppingToken);
             }
         }

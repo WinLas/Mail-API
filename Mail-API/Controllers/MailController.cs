@@ -43,17 +43,15 @@ namespace Mail_API.Controllers
 
         // POST: api/Mail
         [HttpPost]
-        public async Task<IActionResult> Post(Mail value)
+        public async Task<IActionResult> Post(Mail mail)
        {
-           if (value.IsValid())
+           if (mail.IsValid())
            {
-                string trackingId = Guid.NewGuid().ToString();
-                value.TrackerId = trackingId; 
-                string imageHtml = "<img src='" + Request.Scheme + "://" + Request.Host + Request.PathBase + Url.Action("getPixel", "Track", new { trackingId = trackingId }) + "'>";
-                value.Body = value.Body + imageHtml;
-                _context.Mails.Add(value);
+               mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase +
+                             Url.Action("getPixel", "Track"));
+               _context.Mails.Add(mail);
                 _context.SaveChanges();
-               return Ok(value.Id);
+               return Ok(mail.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");
        }

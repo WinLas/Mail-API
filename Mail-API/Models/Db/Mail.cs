@@ -20,6 +20,14 @@ namespace Mail_API.Models.Db
         public string Body { get; set; }
         public string ErrorStatus { get; set; }
 
+        public void SetPixel(string url)
+        {
+            string trackingId = Guid.NewGuid().ToString();
+            TrackerId = trackingId;
+            string imageHtml = "<img src='" + url +  "/api/track/" + trackingId +"'>";
+            Body = Body + imageHtml;
+        }
+
         public bool IsValid()
         {
             return !string.IsNullOrEmpty(Body) && !string.IsNullOrEmpty(Receiver) && !string.IsNullOrEmpty(Sender);

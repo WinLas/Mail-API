@@ -21,6 +21,7 @@ namespace Mail_API.Controllers
             _context = context;
         }
 
+        [HttpGet("{trackingId}")]
         public async Task<FileContentResult> getPixel(string trackingId)
         {
             //get request parameters  
@@ -28,6 +29,7 @@ namespace Mail_API.Controllers
 
             //get request headers  
             var headers = Request.Headers.Keys.ToDictionary(k => k, k => Request.Query[k]);
+
 
                await Task.Factory.StartNew((data) =>
             {
