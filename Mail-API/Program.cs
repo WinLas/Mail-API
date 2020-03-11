@@ -1,14 +1,10 @@
-using Amazon;
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using Amazon.SimpleEmail;
 using Mail_API.Entities;
-using Amazon.SimpleEmail.Model;
-using Mail_API.Models.Db;
+using Microsoft.Extensions.Configuration;
+using Serilog;
+
 
 namespace Mail_API
 {
@@ -16,10 +12,32 @@ namespace Mail_API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().MigrateDatabase().Run();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+            try
+            {
+                Log.Information("Mail-Api starting");
+                CreateHostBuilder(args).Build().MigrateDatabase().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Information(ex, "Mail-Api failed to start.");
+                throw;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+           
         }
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

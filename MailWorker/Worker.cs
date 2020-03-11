@@ -31,7 +31,7 @@ namespace MailWorker
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "fel");
+                    _logger.LogError(e, "Could not send email.");
                 }
                 
                 await Task.Delay(15000, stoppingToken);

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Mail_API.Models.Db;
-
+using Serilog;
 
 
 namespace Mail_API
@@ -50,6 +50,8 @@ namespace Mail_API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
