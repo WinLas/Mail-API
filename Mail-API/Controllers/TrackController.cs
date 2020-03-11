@@ -12,12 +12,12 @@ namespace Mail_API.Controllers
     [ApiController]
     public class TrackController : ControllerBase
     {
-        readonly FileContentResult pixelResponse;
+        readonly FileContentResult _pixelResponse;
         private readonly MailDbContext _context;
 
         public TrackController(FileContentResult pixelResponse, MailDbContext context)
         {
-            this.pixelResponse = pixelResponse;
+            this._pixelResponse = pixelResponse;
             _context = context;
         }
 
@@ -42,7 +42,7 @@ namespace Mail_API.Controllers
 
             }, parameters.Union(headers).ToDictionary(k => k.Key, v => v.Value)).ConfigureAwait(false);
             //return pixel  
-            return pixelResponse;
+            return _pixelResponse;
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger;
 using Microsoft.EntityFrameworkCore;
 using Mail_API.Models.Db;
-using IAmazonSimpleEmailService = Amazon.SimpleEmail.IAmazonSimpleEmailService;
+
 
 
 namespace Mail_API
@@ -42,14 +42,12 @@ namespace Mail_API
 }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            loggerFactory.AddFile("Logs/Mail-Api-{Date}.txt");
 
             app.UseHttpsRedirection();
 
