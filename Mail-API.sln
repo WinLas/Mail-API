@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mail-API", "Mail-API\Mail-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MailWorker", "MailWorker\MailWorker.csproj", "{A7FF039D-2656-4D0E-8A54-DE031BABE521}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsMail-API", "TestsMail-API\TestsMail-API.csproj", "{198C666D-97FD-4246-A94C-57441FD0592A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Release|Any CPU.Build.0 = Release|Any CPU
+		{198C666D-97FD-4246-A94C-57441FD0592A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198C666D-97FD-4246-A94C-57441FD0592A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198C666D-97FD-4246-A94C-57441FD0592A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198C666D-97FD-4246-A94C-57441FD0592A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
