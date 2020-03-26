@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mail;
 
 namespace Mail_API.Models.Db
 {
@@ -24,13 +25,24 @@ namespace Mail_API.Models.Db
         {
             string trackingId = Guid.NewGuid().ToString();
             TrackerId = trackingId;
-            string imageHtml = "<img src='" + url +  "/api/track/" + trackingId +"'>";
+            string imageHtml = "<img src='" + url + "/api/track/" + trackingId + "'>";
             Body = Body + imageHtml;
         }
-
+        public bool ValidateEmail(string emailAddress)
+        {
+            try
+            {
+                var mailAddress = new MailAddress(emailAddress);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(Body) && !string.IsNullOrEmpty(Receiver) && !string.IsNullOrEmpty(Sender);
+            return !string.IsNullOrEmpty(Body) && ValidateEmail(Receiver) && ValidateEmail(Sender);
         }
     }
 }

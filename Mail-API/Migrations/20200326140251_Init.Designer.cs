@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mail_API.Migrations
 {
     [DbContext(typeof(MailDbContext))]
-    [Migration("20200228121911_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20200326140251_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,14 +76,14 @@ namespace Mail_API.Migrations
                         {
                             Id = 1,
                             Body = "FirstBody",
-                            CreatedTime = new DateTime(2020, 2, 28, 13, 19, 11, 546, DateTimeKind.Local).AddTicks(140),
-                            ExternalId = "FirstExternalId",
+                            CreatedTime = new DateTime(2020, 3, 26, 15, 2, 50, 846, DateTimeKind.Local).AddTicks(9377),
+                            ExternalId = "Test1",
                             IPAddress = "FirstIPAddress",
-                            OpenTime = new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(2835),
+                            OpenTime = new DateTime(2020, 3, 26, 15, 2, 50, 852, DateTimeKind.Local).AddTicks(9616),
                             Receiver = "FirstReceiver",
                             ReplyTo = "FirstReplyTo",
                             Sender = "FirstSender",
-                            SentTime = new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(2004),
+                            SentTime = new DateTime(2020, 3, 26, 15, 2, 50, 852, DateTimeKind.Local).AddTicks(4510),
                             Status = 0,
                             Subject = "FirstSubject",
                             TrackerId = "FirstTrackerId"
@@ -92,14 +92,14 @@ namespace Mail_API.Migrations
                         {
                             Id = 2,
                             Body = "SecondBody",
-                            CreatedTime = new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4523),
-                            ExternalId = "SecondExternalId",
+                            CreatedTime = new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3286),
+                            ExternalId = "Test2",
                             IPAddress = "SecondIPAddress",
-                            OpenTime = new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4561),
+                            OpenTime = new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3340),
                             Receiver = "SecondReceiver",
                             ReplyTo = "SecondReplyTo",
                             Sender = "SecondSender",
-                            SentTime = new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4544),
+                            SentTime = new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3312),
                             Status = 0,
                             Subject = "SecondSubject",
                             TrackerId = "SecondTrackerId"

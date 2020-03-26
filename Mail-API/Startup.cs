@@ -10,10 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger;
-using Microsoft.EntityFrameworkCore;
 using Mail_API.Models.Db;
 using Serilog;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Mail_API
 {

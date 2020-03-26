@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Mail_API.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,12 +35,12 @@ namespace Mail_API.Migrations
             migrationBuilder.InsertData(
                 table: "Mails",
                 columns: new[] { "Id", "Body", "CreatedTime", "ErrorStatus", "ExternalId", "IPAddress", "OpenTime", "Receiver", "ReplyTo", "Sender", "SentTime", "Status", "Subject", "TrackerId" },
-                values: new object[] { 1, "FirstBody", new DateTime(2020, 2, 28, 13, 19, 11, 546, DateTimeKind.Local).AddTicks(140), null, "FirstExternalId", "FirstIPAddress", new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(2835), "FirstReceiver", "FirstReplyTo", "FirstSender", new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(2004), 0, "FirstSubject", "FirstTrackerId" });
+                values: new object[] { 1, "FirstBody", new DateTime(2020, 3, 26, 15, 2, 50, 846, DateTimeKind.Local).AddTicks(9377), null, "Test1", "FirstIPAddress", new DateTime(2020, 3, 26, 15, 2, 50, 852, DateTimeKind.Local).AddTicks(9616), "FirstReceiver", "FirstReplyTo", "FirstSender", new DateTime(2020, 3, 26, 15, 2, 50, 852, DateTimeKind.Local).AddTicks(4510), 0, "FirstSubject", "FirstTrackerId" });
 
             migrationBuilder.InsertData(
                 table: "Mails",
                 columns: new[] { "Id", "Body", "CreatedTime", "ErrorStatus", "ExternalId", "IPAddress", "OpenTime", "Receiver", "ReplyTo", "Sender", "SentTime", "Status", "Subject", "TrackerId" },
-                values: new object[] { 2, "SecondBody", new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4523), null, "SecondExternalId", "SecondIPAddress", new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4561), "SecondReceiver", "SecondReplyTo", "SecondSender", new DateTime(2020, 2, 28, 13, 19, 11, 548, DateTimeKind.Local).AddTicks(4544), 0, "SecondSubject", "SecondTrackerId" });
+                values: new object[] { 2, "SecondBody", new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3286), null, "Test2", "SecondIPAddress", new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3340), "SecondReceiver", "SecondReplyTo", "SecondSender", new DateTime(2020, 3, 26, 15, 2, 50, 853, DateTimeKind.Local).AddTicks(3312), 0, "SecondSubject", "SecondTrackerId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
