@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mail-API", "Mail-API\Mail-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MailWorker", "MailWorker\MailWorker.csproj", "{A7FF039D-2656-4D0E-8A54-DE031BABE521}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsMail-API", "TestsMail-API\TestsMail-API.csproj", "{198C666D-97FD-4246-A94C-57441FD0592A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mail-Api.IntegrationTests", "Mail-Api.IntegrationTests\Mail-Api.IntegrationTests.csproj", "{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mail-Api.IntegrationTests", "Mail-Api.IntegrationTests\Mail-Api.IntegrationTests.csproj", "{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestMail-Api", "XUnitTestMail-Api\XUnitTestMail-Api.csproj", "{9607303A-F161-40BE-B424-983AC7DA82E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,14 @@ Global
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7FF039D-2656-4D0E-8A54-DE031BABE521}.Release|Any CPU.Build.0 = Release|Any CPU
-		{198C666D-97FD-4246-A94C-57441FD0592A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{198C666D-97FD-4246-A94C-57441FD0592A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{198C666D-97FD-4246-A94C-57441FD0592A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{198C666D-97FD-4246-A94C-57441FD0592A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89DD6CEB-B328-44ED-AEF7-1BC15F63628D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9607303A-F161-40BE-B424-983AC7DA82E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9607303A-F161-40BE-B424-983AC7DA82E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9607303A-F161-40BE-B424-983AC7DA82E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9607303A-F161-40BE-B424-983AC7DA82E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

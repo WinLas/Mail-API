@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mail_API.Controllers
 {
     [Route("api/[controller]")]
-    [BasicAuth]
+  //  [BasicAuth]
     [ApiController]
     public class MailController : ControllerBase
     {
 
-        private readonly MailDbContext _context;
+       // private readonly MailDbContext _context;
         private readonly EmailService _service;
+        private readonly MailDbContext _context;
 
         public MailController(MailDbContext context, EmailService service)
     {
@@ -49,8 +50,8 @@ namespace Mail_API.Controllers
            {
                mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase +
                              Url.Action("getPixel", "Track"));
-               _context.Mails.Add(mail);
-                _context.SaveChanges();
+               _context.Mails.Add(mail); 
+               _context.SaveChanges();
                return Ok(mail.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");
