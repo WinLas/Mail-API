@@ -1,6 +1,8 @@
 ﻿using Mail_API;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -20,9 +22,9 @@ namespace Mail_Api.IntegrationTests
         {
             _client = factory.CreateClient();
         }
-
+        
         [Fact]
-        public async Task Test_Get()
+        public async Task Test_Get_SuccessStatusCode()
         {
             // Arrange
             var request = "/api/Mail";
@@ -33,10 +35,11 @@ namespace Mail_Api.IntegrationTests
 
             //Assert
             response.EnsureSuccessStatusCode();
+            response.StatusCode.Equals(HttpStatusCode.OK);
         }
 
         [Fact]
-        public async Task Test_Post()
+        public async Task Test_Post_SuccessStatusCode()
         {
             //Arrange
             var request = "/api/Mail";
@@ -52,10 +55,48 @@ namespace Mail_Api.IntegrationTests
                         }),
                     Encoding.UTF8,
                         "application/json"));
-
+            // Assert
             response.EnsureSuccessStatusCode();
-
             response.StatusCode.Equals(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task Test_PutSuccessStatusCode()
+        {
+            //Arrange 
+            var request = "/api/Mail";
+
+            //Act
+            var response = await _client.PutAsync(request
+                , new StringContent(
+                    JsonConvert.SerializeObject(
+                        new Mail()
+                        {
+                            ExternalId = "Test1"
+                        }),
+                    Encoding.UTF8,
+                    "application/json"));
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+            response.StatusCode.Equals(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task Get_Returns_Correct_Mail()
+        {
+            //Arrange
+            var request = "/api/Mail/1";
+
+
+            // fel i controllern. /api/mail/1 fungerar inte att söka efter i webbläsaren.
+
+            //Act
+            var response = await _client.GetAsync(request);
+            string stringResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<IEnumerable<Mail>>(stringResponse).ToList();
+          //Assert
+            Assert.Single(result);
         }
     }
 }

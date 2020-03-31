@@ -51,7 +51,7 @@ namespace Mail_Api.IntegrationTests
                         catch(Exception ex)
                         {
                             //log errors 
-                            Console.WriteLine("There was an exception {ex}", ex);
+                            Console.WriteLine("There was an exception {0}", ex);
                             throw;
                         }
                     }

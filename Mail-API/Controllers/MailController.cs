@@ -13,9 +13,8 @@ namespace Mail_API.Controllers
     public class MailController : ControllerBase
     {
 
-       // private readonly MailDbContext _context;
-        private readonly EmailService _service;
         private readonly MailDbContext _context;
+        private readonly EmailService _service;
 
         public MailController(MailDbContext context, EmailService service)
     {
@@ -30,16 +29,16 @@ namespace Mail_API.Controllers
           return Ok(mails);
       }
 
-        // GET: api/Mail/5
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(Mail mail)
+        // GET: api/Mail/1
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            var dbMail = _service.GetById(mail);
-            if(dbMail == null)
+            var mailItem = await _context.Mails.FindAsync(id);
+            if(mailItem == null)
             {
                return NotFound("The email with given id could not be found.");
             }
-            return Ok(dbMail);
+            return Ok(mailItem);
         }
 
         // POST: api/Mail
