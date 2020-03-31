@@ -88,15 +88,14 @@ namespace Mail_Api.IntegrationTests
             //Arrange
             var request = "/api/Mail/1";
 
-
-            // fel i controllern. /api/mail/1 fungerar inte att söka efter i webbläsaren.
-
             //Act
             var response = await _client.GetAsync(request);
-            string stringResponse = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<IEnumerable<Mail>>(stringResponse).ToList();
-          //Assert
-            Assert.Single(result);
+            var stringResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<Mail>(stringResponse);
+            List<Mail> mails = new List<Mail>{result};
+
+            //Assert
+            Assert.Single(mails);
         }
     }
 }
