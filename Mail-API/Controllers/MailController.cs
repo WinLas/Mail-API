@@ -12,13 +12,10 @@ namespace Mail_API.Controllers
     [ApiController]
     public class MailController : ControllerBase
     {
-
-        private readonly MailDbContext _context;
         private readonly EmailService _service;
 
-        public MailController(MailDbContext context, EmailService service)
+        public MailController(EmailService service)
     {
-        _context = context;
         _service = service;
     }
         // GET: api/Mail
@@ -33,7 +30,7 @@ namespace Mail_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var mailItem = await _context.Mails.FindAsync(id);
+            var mailItem = _service.GetById(id);
             if(mailItem == null)
             {
                return NotFound("The email with given id could not be found.");
@@ -49,8 +46,7 @@ namespace Mail_API.Controllers
            {
                mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase +
                              Url.Action("getPixel", "Track"));
-               _context.Mails.Add(mail); 
-               _context.SaveChanges();
+               await _service.AddMail(mail);
                return Ok(mail.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");

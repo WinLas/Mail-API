@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Mail_API.Models
 {
@@ -18,6 +20,12 @@ namespace Mail_API.Models
             _context = context;
         }
 
+        public async Task AddMail (Mail mail)
+        {
+            _context.Mails.Add(mail);
+            _context.SaveChanges();
+        }
+
         public async Task SendUnsentMail()
         {
             var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
@@ -27,10 +35,10 @@ namespace Mail_API.Models
             }
             else
             {
-                await AddMail(mail);
+                await SendMail(mail);
             }
         }
-        public async Task<Mail> AddMail(Mail mail)
+        public async Task<Mail> SendMail(Mail mail)
         {
             // Setup the email recipients.
             var oDestination = new Destination();
@@ -74,10 +82,10 @@ namespace Mail_API.Models
             return allMails;
         }
 
-        public Mail GetById(Mail mail)
-        {
-            var dbMail = _context.Mails.FirstOrDefault(m => m.Id.Equals(mail.Id));
-            return dbMail;
+        public Mail GetById(int id)
+        { 
+            var mailItem = _context.Mails.Find(id);
+            return mailItem;
         }
 
         public Mail UpdateMail(Mail mail)

@@ -61,7 +61,7 @@ namespace Mail_Api.IntegrationTests
         }
 
         [Fact]
-        public async Task Test_PutSuccessStatusCode()
+        public async Task Test_Put_SuccessStatusCode()
         {
             //Arrange 
             var request = "/api/Mail";
@@ -83,10 +83,10 @@ namespace Mail_Api.IntegrationTests
         }
 
         [Fact]
-        public async Task Get_Returns_Correct_Mail()
+        public async Task Get_Returns_Correct_Mail_By_Id()
         {
             //Arrange
-            var request = "/api/Mail/1";
+            var request = "/api/Mail/2";
 
             //Act
             var response = await _client.GetAsync(request);
@@ -97,5 +97,6 @@ namespace Mail_Api.IntegrationTests
             //Assert
             Assert.Single(mails);
         }
+        
     }
 }
