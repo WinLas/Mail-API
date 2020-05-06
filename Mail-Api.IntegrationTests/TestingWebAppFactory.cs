@@ -46,7 +46,6 @@ namespace Mail_Api.IntegrationTests
                         try
                         {
                             appContext.Database.EnsureCreated();
-                        
                         }
                         catch(Exception ex)
                         {

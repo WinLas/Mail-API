@@ -64,12 +64,5 @@ namespace Mail_API.Controllers
 
             return Ok(dbMail);
         }
-
-        // DELETE: api/ApiWithActions/5
-    /*    [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-        */
     }
 }

@@ -78,7 +78,7 @@ namespace Mail_API.Models
 
         public IEnumerable<Mail> GetAllMails()
         {
-            var allMails = _context.Mails.ToList();
+            var allMails = _context.Mails.OrderByDescending(m => m.CreatedTime).Take(100).ToList();
             return allMails;
         }
 

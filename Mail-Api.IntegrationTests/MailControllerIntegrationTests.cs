@@ -28,7 +28,7 @@ namespace Mail_Api.IntegrationTests
             _client = factory.CreateClient();
             _client.BaseAddress = new Uri("https://test2.winlas.se/mailapi");
         }
-        
+
         [Fact]
         public async Task Test_Get_SuccessStatusCode()
         {
@@ -103,18 +103,19 @@ namespace Mail_Api.IntegrationTests
             //Assert
             Assert.Single(mails);
         }
+        
         [Fact]
             public void ResponseTime_100GetByIdRequestsAsync()
             {
                 var allResponseTimes = new List<(DateTime Start, DateTime End)>();
-
-                for (var i = 0; i < 100; i++)
-                {
-                    var request = "/api/mail/2";
-                        var start = DateTime.Now;
-                        var response = _client.GetAsync(request).Result;
-                        var end = DateTime.Now;
-                        allResponseTimes.Add((start, end));
+                
+            for (var i = 0; i < 100; i++)
+            {
+                 var request = "/api/mail/2";
+                 var start = DateTime.Now;
+                var response = _client.GetAsync(request).Result;
+                var end = DateTime.Now;
+                allResponseTimes.Add((start, end));
                 // setting variable to documents path
                 string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -122,43 +123,44 @@ namespace Mail_Api.IntegrationTests
                         {
                             outputFile.WriteLine("{0}", (end-start).TotalMilliseconds);
                         }
-                }
-
-                var expected = 100;
-                var actual = (int)allResponseTimes.Select(r => (r.End - r.Start).TotalMilliseconds).Average();
-                Assert.True(actual <= expected, $"Expected average response time of less than or equal to {expected} ms but was {actual} ms.");
             }
+
+            var expected = 100;
+            var actual = (int)allResponseTimes.Select(r => (r.End - r.Start).TotalMilliseconds).Average();
+            Assert.True(actual <= expected, $"Expected average response time of less than or equal to {expected} ms but was {actual} ms.");
+            }
+
             [Fact]
             public void ResponseTime_100PutRequestsAsync()
             {
                 var allResponseTimes = new List<(DateTime Start, DateTime End)>();
 
-                string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            using (StreamWriter writer = new StreamWriter(Path.Combine(docPath, "ResponseTimePut.txt"), true))
-            {
                 for (var i = 0; i < 100; i++)
                 {
                     var request = "/api/mail";
                     var start = DateTime.Now;
                     var response = _client.PutAsync(request
-                    , new StringContent(
-                        JsonConvert.SerializeObject(
-                            new Mail()
-                            {
-                                ExternalId = "Test1"
-                            }),
-                        Encoding.UTF8,
-                        "application/json"
+                        , new StringContent(
+                            JsonConvert.SerializeObject(
+                                new Mail()
+                                {
+                                    ExternalId = "Test1"
+                                }),
+                            Encoding.UTF8,
+                            "application/json"
                         )).Result;
-                    var end = DateTime.Now;
-                    allResponseTimes.Add((start, end));
-                    writer.WriteLine("{0}", (end - start).TotalMilliseconds);
+                var end = DateTime.Now;
+                allResponseTimes.Add((start, end));
+                string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(docPath, "ResponseTimePut.txt"), true))
+                    {
+                        writer.WriteLine("{0}", (end - start).TotalMilliseconds);
+                    }
                 }
-            }
-            var expected = 100;
-            var actual = (int)allResponseTimes.Select(r => (r.End - r.Start).TotalMilliseconds).Average();
-            Assert.True(actual <= expected, $"Expected average response time of less than or equal to {expected} ms but was {actual} ms.");
+                var expected = 100;
+                var actual = (int)allResponseTimes.Select(r => (r.End - r.Start).TotalMilliseconds).Average();
+                Assert.True(actual <= expected, $"Expected average response time of less than or equal to {expected} ms but was {actual} ms.");
         }
 
             [Fact]
@@ -166,33 +168,36 @@ namespace Mail_Api.IntegrationTests
             {
              
                 var allResponseTimes = new List<(DateTime Start, DateTime End)>();
-                string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-                using (StreamWriter writer = new StreamWriter(Path.Combine(docPath, "ResponseTimePost.txt"), true))
+                for (var i = 0; i < 100; i++)
                 {
-                    for (var i = 0; i < 100; i++)
+                    var request = "/api/mail";
+                    var start = DateTime.Now;
+                    var response = _client.PostAsync(request
+                        , new StringContent(
+                            JsonConvert.SerializeObject(
+                                new Mail()
+                                {
+                                    Sender = "no-reply@winlas.se",
+                                    Receiver = "robin.eskilsson@winlas.se",
+                                    Body = "ImABody"
+                                }),
+                            Encoding.UTF8,
+                            "application/json"
+                        )).Result;
+                    var end = DateTime.Now;
+                    allResponseTimes.Add((start, end));
+                    string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                    using (StreamWriter writer = new StreamWriter(Path.Combine(docPath, "ResponseTimePost.txt"), true))
                     {
-                        var request = "/api/mail";
-                        var start = DateTime.Now;
-                        var response = _client.PostAsync(request
-                            , new StringContent(
-                                JsonConvert.SerializeObject(
-                                    new Mail()
-                                    {
-                                        Sender = "no-reply@winlas.se",
-                                        Receiver = "robin.eskilsson@winlas.se",
-                                        Body = "ImABody"
-                                    }),
-                                Encoding.UTF8,
-                                "application/json"
-                            )).Result;
-                        var end = DateTime.Now;
-                        allResponseTimes.Add((start, end));
-                        writer.WriteLine("{0}", (end - start).TotalMilliseconds);
+                            writer.WriteLine("{0}", (end - start).TotalMilliseconds);
                     }
                 }
-                var expected = 100;
+                var expected = 500;
                 var actual = (int) allResponseTimes.Select(r => (r.End - r.Start).TotalMilliseconds).Average();
-            }
+                Assert.True(actual <= expected, $"Expected average response time of less than or equal to {expected} ms but was {actual} ms.");
+        }
+        
     }
 }
