@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Policy;
 using System.Threading.Tasks;
 using Amazon;
@@ -8,6 +10,7 @@ using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 
 namespace Mail_API.Models
 {
@@ -31,19 +34,50 @@ namespace Mail_API.Models
             var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
             if (mail == null)
             {
-
+                Console.WriteLine("No emails in queue");
             }
             else
             {
                 await SendMail(mail);
+                Console.WriteLine("Email has been sent");
             }
         }
+        private static BodyBuilder GetMessageBody(Mail mail)
+        {
+            var body = new BodyBuilder()
+            {
+
+                HtmlBody = mail.Body,
+            };
+            body.Attachments.Add(@"c:\Users\robin.eskilsson\Attachment.txt");
+            return body;
+        }
+
+        private static MimeMessage GetMessage(Mail mail)
+        {
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("NoReply", mail.Sender));
+            message.To.Add(new MailboxAddress(string.Empty, mail.Receiver));
+            message.Subject = "Subject";
+            message.Body = GetMessageBody(mail).ToMessageBody();
+            return message;
+        }
+
+        private static MemoryStream GetMessageStream(Mail mail)
+        {
+            var stream = new MemoryStream();
+            GetMessage(mail).WriteTo(stream);
+            return stream;
+        }
+
+
         public async Task<Mail> SendMail(Mail mail)
         {
             // Setup the email recipients.
             var oDestination = new Destination();
             List<string> emailList = new List<string> { mail.Receiver };
             oDestination.ToAddresses = emailList;
+
 
             // Create the email subject.
             var oSubject = new Content();
@@ -55,6 +89,7 @@ namespace Mail_API.Models
             var oBody = new Body();
             oBody.Html = oTextBody;
 
+
             // Create and transmit the email to the recipients via Amazon SES.
             var oMessage = new Message();
             oMessage.Body = oBody;
@@ -64,14 +99,26 @@ namespace Mail_API.Models
             request.Source = mail.Sender;
             request.Destination = oDestination;
             request.Message = oMessage;
+      
             using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
             {
-                reply = await client.SendEmailAsync(request);
-                mail.ExternalId = reply.MessageId;
-                mail.SentTime = DateTime.Now;
-                mail.Status = MailStatus.Sent;
-                _context.Mails.Update(mail);
-                _context.SaveChanges();
+                var sendRequest = new SendRawEmailRequest{RawMessage = new RawMessage(GetMessageStream(mail))};
+                try
+                {
+                    var response = client.SendRawEmailAsync(sendRequest);
+                    mail.ExternalId = reply.MessageId;
+                    mail.SentTime = DateTime.Now;
+                    mail.Status = MailStatus.Sent;
+                    _context.Mails.Update(mail);
+                    _context.SaveChanges();
+                    Console.WriteLine("Email has been sent successfully");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Email could not be sent");
+                    Console.WriteLine("Error Message: " + e.Message);
+                }
+
             }
             return mail;
         }
