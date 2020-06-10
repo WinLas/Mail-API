@@ -32,14 +32,14 @@ namespace Mail_API.Models
         public async Task SendUnsentMail()
         {
             var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
-            if (mail == null)
+            if (mail.SentTime == null)
             {
-                Console.WriteLine("No emails in queue");
+                await SendMail(mail);
+               // Console.WriteLine("Email has been sent");
             }
             else
             {
-                await SendMail(mail);
-                Console.WriteLine("Email has been sent");
+               
             }
         }
         private static BodyBuilder GetMessageBody(Mail mail)
@@ -58,7 +58,8 @@ namespace Mail_API.Models
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("NoReply", mail.Sender));
             message.To.Add(new MailboxAddress(string.Empty, mail.Receiver));
-            message.Subject = "Subject";
+            message.Subject = "subject";
+
             message.Body = GetMessageBody(mail).ToMessageBody();
             return message;
         }
@@ -73,52 +74,17 @@ namespace Mail_API.Models
 
         public async Task<Mail> SendMail(Mail mail)
         {
-            // Setup the email recipients.
-            var oDestination = new Destination();
-            List<string> emailList = new List<string> { mail.Receiver };
-            oDestination.ToAddresses = emailList;
+            SendRawEmailResponse reply = null;
 
-
-            // Create the email subject.
-            var oSubject = new Content();
-            oSubject.Data = "subject";
-
-            // Create the email body.
-            var oTextBody = new Content();
-            oTextBody.Data = mail.Body;
-            var oBody = new Body();
-            oBody.Html = oTextBody;
-
-
-            // Create and transmit the email to the recipients via Amazon SES.
-            var oMessage = new Message();
-            oMessage.Body = oBody;
-            oMessage.Subject = oSubject;
-            SendEmailResponse reply = null;
-            var request = new SendEmailRequest();
-            request.Source = mail.Sender;
-            request.Destination = oDestination;
-            request.Message = oMessage;
-      
             using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
             {
                 var sendRequest = new SendRawEmailRequest{RawMessage = new RawMessage(GetMessageStream(mail))};
-                try
-                {
-                    var response = client.SendRawEmailAsync(sendRequest);
-                    mail.ExternalId = reply.MessageId;
-                    mail.SentTime = DateTime.Now;
-                    mail.Status = MailStatus.Sent;
-                    _context.Mails.Update(mail);
-                    _context.SaveChanges();
-                    Console.WriteLine("Email has been sent successfully");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Email could not be sent");
-                    Console.WriteLine("Error Message: " + e.Message);
-                }
-
+                reply = await client.SendRawEmailAsync(sendRequest);
+                mail.ExternalId = reply.MessageId;
+                mail.SentTime = DateTime.Now;
+                mail.Status = MailStatus.Sent;
+                _context.Mails.Update(mail);
+                _context.SaveChanges();
             }
             return mail;
         }

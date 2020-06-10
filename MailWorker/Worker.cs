@@ -7,6 +7,7 @@ using Mail_API.Models;
 using Mail_API.Models.Db;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 
 namespace MailWorker
 {
@@ -28,13 +29,14 @@ namespace MailWorker
                 try
                 {
                     await _service.SendUnsentMail();
+                    _logger.LogInformation("Email has been sent");
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e.Message, "{0}");
+                    _logger.LogInformation("No emails in queue");
                 }
                 
-                await Task.Delay(15000, stoppingToken);
+                await Task.Delay(5000, stoppingToken);
             }
         }
     }
