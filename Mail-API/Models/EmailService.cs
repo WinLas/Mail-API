@@ -53,7 +53,7 @@ namespace Mail_API.Models
             };
           //  List<AttachmentFiles> list = new List<AttachmentFiles>();
             var files = _context.DbFiles.Where(f => mail.Id == f.MailId).ToList();
-            if (files != null)
+            if (files.Count > 0)
             {
                 foreach (AttachmentFiles file in files)
                 {
