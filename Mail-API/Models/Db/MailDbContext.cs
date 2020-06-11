@@ -16,7 +16,9 @@ namespace Mail_API.Models.Db
         {
         }
 
-        public DbSet<Mail> Mails { get; set; }
+        public DbSet<Mail> DbMails { get; set; }
+        public DbSet<AttachmentFiles> DbFiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Mail>()
@@ -30,8 +32,8 @@ namespace Mail_API.Models.Db
                         TrackerId = "FirstTrackerId",
                         OpenTime = DateTime.Now,
                         IPAddress = "FirstIPAddress",
-                        Receiver = "FirstReceiver",
-                        Sender = "FirstSender",
+                        Receiver = "robin.eskilsson@winlas.se",
+                        Sender = "no-reply@winlas.se",
                         ReplyTo = "FirstReplyTo",
                         Subject = "FirstSubject",
                         Body = "FirstBody",
@@ -52,6 +54,16 @@ namespace Mail_API.Models.Db
                         Body = "SecondBody",
                     }
                 );
-        }
+            modelBuilder.Entity<AttachmentFiles>()
+                .HasData(
+                    new AttachmentFiles
+                    {
+                        Id = 1,
+                        Name = "Attachment.txt",
+                        FileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin.eskilsson\Attachment.txt"),
+                        MailId = 1
+                    }
+                );
+    }
     }
 }

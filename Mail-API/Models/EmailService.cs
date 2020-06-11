@@ -9,8 +9,10 @@ using Amazon;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
+using SQLitePCL;
 
 namespace Mail_API.Models
 {
@@ -25,13 +27,13 @@ namespace Mail_API.Models
 
         public async Task AddMail (Mail mail)
         {
-            _context.Mails.Add(mail);
+            _context.DbMails.Add(mail);
             _context.SaveChanges();
         }
 
         public async Task SendUnsentMail()
         {
-            var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
+            var mail = _context.DbMails.FirstOrDefault(m => m.SentTime == null);
             if (mail.SentTime == null)
             {
                 await SendMail(mail);
@@ -42,35 +44,44 @@ namespace Mail_API.Models
                
             }
         }
-        private static BodyBuilder GetMessageBody(Mail mail)
+
+        private BodyBuilder GetMessageBody(Mail mail)
         {
             var body = new BodyBuilder()
             {
-
                 HtmlBody = mail.Body,
             };
-            body.Attachments.Add(@"c:\Users\robin.eskilsson\Attachment.txt");
-            return body;
+          //  List<AttachmentFiles> list = new List<AttachmentFiles>();
+            var files = _context.DbFiles.Where(f => mail.Id == f.MailId).ToList();
+            if (files != null)
+            {
+                foreach (AttachmentFiles file in files)
+                {
+                    body.Attachments.Add(file.Name, file.FileBytes);
+                }
+            }
+
+            //   body.Attachments.Add(@"c:\Users\robin.eskilsson\Attachment.txt");
+                
+                return body;
         }
 
-        private static MimeMessage GetMessage(Mail mail)
+        private MimeMessage GetMessage(Mail mail)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("NoReply", mail.Sender));
             message.To.Add(new MailboxAddress(string.Empty, mail.Receiver));
             message.Subject = "subject";
-
             message.Body = GetMessageBody(mail).ToMessageBody();
             return message;
         }
 
-        private static MemoryStream GetMessageStream(Mail mail)
+        private MemoryStream GetMessageStream(Mail mail)
         {
             var stream = new MemoryStream();
             GetMessage(mail).WriteTo(stream);
             return stream;
         }
-
 
         public async Task<Mail> SendMail(Mail mail)
         {
@@ -83,7 +94,7 @@ namespace Mail_API.Models
                 mail.ExternalId = reply.MessageId;
                 mail.SentTime = DateTime.Now;
                 mail.Status = MailStatus.Sent;
-                _context.Mails.Update(mail);
+                _context.DbMails.Update(mail);
                 _context.SaveChanges();
             }
             return mail;
@@ -91,22 +102,22 @@ namespace Mail_API.Models
 
         public IEnumerable<Mail> GetAllMails()
         {
-            var allMails = _context.Mails.OrderByDescending(m => m.CreatedTime).Take(100).ToList();
+            var allMails = _context.DbMails.OrderByDescending(m => m.CreatedTime).Take(100).ToList();
             return allMails;
         }
 
         public Mail GetById(int id)
         { 
-            var mailItem = _context.Mails.Find(id);
+            var mailItem = _context.DbMails.Find(id);
             return mailItem;
         }
 
         public Mail UpdateMail(Mail mail)
         {
-            var dbMail = _context.Mails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
+            var dbMail = _context.DbMails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
             dbMail.Status = (MailStatus)2;
             dbMail.ErrorStatus = mail.ErrorStatus;
-            _context.Mails.Update(dbMail);
+            _context.DbMails.Update(dbMail);
             _context.SaveChanges();
             return dbMail;
         }
