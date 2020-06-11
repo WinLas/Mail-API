@@ -36,7 +36,8 @@ namespace Mail_API
                 this.Configuration.GetValue<String>("Response:PixelContentType")
         ));
             services.AddScoped<EmailService>();
-            services.AddControllers(); 
+            services.AddControllersWithViews();
+            //services.AddControllers(); 
             services.AddMvc();
 }
 
@@ -58,7 +59,10 @@ namespace Mail_API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //  endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
