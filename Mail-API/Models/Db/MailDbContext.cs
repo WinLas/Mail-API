@@ -21,39 +21,28 @@ namespace Mail_API.Models.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Mail>()
-                .HasData(
-                    new Mail
-                    {
-                        Id = 1,
-                        ExternalId = "Test1",
-                        CreatedTime = DateTime.Now,
-                        SentTime = DateTime.Now,
-                        TrackerId = "FirstTrackerId",
-                        OpenTime = DateTime.Now,
-                        IPAddress = "FirstIPAddress",
-                        Receiver = "robin.eskilsson@winlas.se",
-                        Sender = "no-reply@winlas.se",
-                        ReplyTo = "FirstReplyTo",
-                        Subject = "FirstSubject",
-                        Body = "FirstBody",
-                    },
-                    new Mail
-                    {
-                        Id = 2,
-                        ExternalId = "Test2",
-                        CreatedTime = DateTime.Now,
-                        SentTime = DateTime.Now,
-                        TrackerId = "SecondTrackerId",
-                        OpenTime = DateTime.Now,
-                        IPAddress = "SecondIPAddress",
-                        Receiver = "SecondReceiver",
-                        Sender = "SecondSender",
-                        ReplyTo = "SecondReplyTo",
-                        Subject = "SecondSubject",
-                        Body = "SecondBody",
-                    }
-                );
+            for (int i = 1; i < 101; i++)
+            {
+                modelBuilder.Entity<Mail>()
+                    .HasData(
+                        new Mail
+                        {
+                            Id = i,
+                            ExternalId = "Test1",
+                            CreatedTime = DateTime.Now,
+                            SentTime = DateTime.Now,
+                            TrackerId = "FirstTrackerId",
+                            OpenTime = DateTime.Now,
+                            IPAddress = "FirstIPAddress",
+                            Receiver = "robin.eskilsson@winlas.se",
+                            Sender = "no-reply@winlas.se",
+                            ReplyTo = "FirstReplyTo",
+                            Subject = "FirstSubject",
+                            Body = "FirstBody",
+                        }
+                    );
+            }
+
             modelBuilder.Entity<AttachmentFiles>()
                 .HasData(
                     new AttachmentFiles

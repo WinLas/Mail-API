@@ -56,13 +56,13 @@ namespace Mail_API
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 //  endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Logging}/{action=Index}/{id?}");
             });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
