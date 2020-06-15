@@ -22,14 +22,14 @@ namespace Mail_API.Controllers
         {
             _context = context;
         }
-       
-        
+
+
         public async Task<IActionResult> Index()
         {
-            ViewBag.a1 = "a1";
-            ViewBag.b1 = "b1";
-            ViewBag.c1 = "c1";
-            ViewBag.d1 = "d1";
+            /* ViewBag.a1 = "a1";
+             ViewBag.b1 = "b1";
+             ViewBag.c1 = "c1";
+             ViewBag.d1 = "d1";*/
             return View(await _context.DbMails.ToListAsync());
         }
 
@@ -59,9 +59,14 @@ namespace Mail_API.Controllers
             int skip = start != null ? Convert.ToInt32(start) : 0;
             // getting all Customer data  
 
-            var data = dbData.Skip(skip).Take(pageSize).ToList();
+            var data = dbData.Skip(skip).Take(pageSize).AsQueryable();
+
             //returnera draw, dbdata, recordsTotal och recordsFiltered i jsonformat
-            return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            return Json(new { draw = draw, recordsTotal = recordsTotal, recordsFiltered = recordsFiltered, data = data });
+         
+            
+            
+            //  return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
         }
     }
 }

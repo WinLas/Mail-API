@@ -10,50 +10,55 @@
         }
     </head>
 <script>
-    $(document).ready( function () {
+    $(document).ready(function () {
+        console.log( "ready!" );
         var table = $('#mailTable').DataTable({
+                        language: {
+        processing: "Loading Data...",
+        zeroRecords: "No matching records found"
+    },
         order: [[0, "desc"]],
-        "pageLength": 50,
-        "processing": true,
-        "serverSide": true,
-        "searchDelay": 350,
-        "ajax": {
-            "url": "/logging/loaddata",
-            "type": "POST",
-            "datatype": "json"
+        pageLength: 50,
+        processing: true,
+        serverSide: true,
+        searchDelay: 350,
+            ajax: {
+            type: "POST",
+            url: '/Logging/LoadData',
+            datatype: "json",
         },
-        "columns":[
-            { "data": "Id", "name": "Id"},
-            { "data": "ExternalId", "name": "ExternalId"},
-            { "data": "Status","name": "Status"},
-            { "data": "CreatedTime", "name": "CreatedTime"},
-            { "data": "SentTime","name": "SentTime"},
-            { "data": "TrackerId","name": "TrackerId"},
-            { "data": "OpenTime","name": "OpenTime"},
-            { "data": "IPAddress","name": "IPAddress"},
-            { "data": "Receiver","name": "Receiver"},
-            { "data": "Sender","name": "Sender"},
-            { "data": "ReplyTo","name": "ReplyTo"},
-            { "data": "Subject","name": "Subject"},
-            { "data": "Body", "name": "Body" },
-            { "data":null, "render": function(data,type,row,meta){
+        columns:[
+            { data: "id", name:"Id"},
+            { data: "externalId", name:"ExternalId"},
+            { data: "status", name:"Status"},
+            { data: "createdTime", name:"CreatedTime"},
+            { data: "sentTime", name:"SentTime"},
+            { data: "trackerId", name:"TrackerId"},
+            { data: "openTime", name:"OpenTime"},
+     //       { "data": "iPAddress"},
+            { data: "receiver", name:"Receiver"},
+            { data: "sender", name:"Sender"},
+            { data: "replyTo", name:"ReplyTo"},
+            { data: "subject", name:"Subject"},
+            { data: "body", name:"Body"},
+            { data:null, render: function(data,type,row,meta){
                 return "<td><button id='expand-"+row.id+"' class='btn btn-primary expand'>Visa hela meddelandet</button></td>";		
             }}
-        ]
+            ]
     });
 	
 	$('#searchField').on( 'keyup', function () {
 		table.search( this.value ).draw();
 	});
 	$('body').on('click','.expand', function(){
-		var id = $(this).attr('Id').substr(7);
+		var id = $(this).attr('id').substr(7);
 		$(this).closest('tr').after("<tr><td colspan='7' id='td_"+id+"'>Test</td></tr>");
 		console.log("We Click");
 		$.ajax({    
 			context: this,
 			url: 'ajax.php',                        
 			type : 'POST',
-			data: {'Id': id},   
+			data: {'id': id},   
 			error: function(error){
 				console.log(error,"Error in ajax request");
 			},
@@ -67,7 +72,7 @@
 		});
 	});
 	$('body').on('click', '.contract', function(){
-		var id = $(this).attr('Id').substr(9);
+		var id = $(this).attr('id').substr(9);
 		$('#td_'+id).parent().remove();
 		$(this).replaceWith("<button id='expand_"+id+"' class='btn btn-primary expand'>Visa hela meddelandet</button>");
 	});
@@ -93,18 +98,6 @@
         background-color: #dff0d8;
     }
 
-    table.dataTable thead .sorting:after,
-    table.dataTable thead .sorting:before,
-    table.dataTable thead .sorting_asc:after,
-    table.dataTable thead .sorting_asc:before,
-    table.dataTable thead .sorting_asc_disabled:after,
-    table.dataTable thead .sorting_asc_disabled:before,
-    table.dataTable thead .sorting_desc:after,
-    table.dataTable thead .sorting_desc:before,
-    table.dataTable thead .sorting_desc_disabled:after,
-    table.dataTable thead .sorting_desc_disabled:before {
-        bottom: .5em;
-    }
 </style>
 
 <div class="container">
@@ -117,7 +110,6 @@
 </div>
 
 <div class="container-fluid">
-    <div id="mailTableWrapper container-fluid">
         <div class="row">
             <div class="col-sm-12">
                 <table class="table" id="mailTable">
@@ -143,10 +135,7 @@
                         </th>
                         <th class="sorting">
                             @Html.DisplayNameFor(model => model.OpenTime)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.IPAddress)
-                        </th>
+                        </th>                                             
                         <th class="sorting">
                             @Html.DisplayNameFor(model => model.Receiver)
                         </th>
@@ -190,9 +179,6 @@
                                 @Html.DisplayFor(modelItem => item.OpenTime)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.IPAddress)
-                            </td>
-                            <td>
                                 @Html.DisplayFor(modelItem => item.Receiver)
                             </td>
                             <td>
@@ -212,6 +198,5 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+         </div>
 </div>
