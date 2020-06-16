@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Amazon.Runtime;
 using Amazon.SimpleEmail;
 using Mail_API.Models;
@@ -11,8 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger;
 using Mail_API.Models.Db;
+using Microsoft.AspNetCore.Http;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace Mail_API
 {
@@ -56,7 +59,13 @@ namespace Mail_API
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                // Where the files are physicly located
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"js")),
+                // What relative url to serve the files from
+                RequestPath = new PathString("/js")
+            });
             app.UseEndpoints(endpoints =>
             {
                 //  endpoints.MapControllers();

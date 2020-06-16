@@ -51,7 +51,6 @@ namespace Mail_API.Models
             {
                 HtmlBody = mail.Body,
             };
-          //  List<AttachmentFiles> list = new List<AttachmentFiles>();
             var files = _context.DbFiles.Where(f => mail.Id == f.MailId).ToList();
             if (files.Count > 0)
             {
@@ -61,9 +60,7 @@ namespace Mail_API.Models
                 }
             }
 
-            //   body.Attachments.Add(@"c:\Users\robin.eskilsson\Attachment.txt");
-                
-                return body;
+            return body;
         }
 
         private MimeMessage GetMessage(Mail mail)

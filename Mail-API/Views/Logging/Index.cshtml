@@ -4,108 +4,31 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"></link>
+        <script type="text/javascript" src="../../js/winlas.js"></script>
+        <link rel="shortcut icon" href="https://winlas.se/assets/favicon.png" />
         @{
             ViewData["Title"] = "Mail-log";
         }
     </head>
-<script>
-    $(document).ready(function () {
-        console.log( "ready!" );
-        var table = $('#mailTable').DataTable({
-                        language: {
-        processing: "Loading Data...",
-        zeroRecords: "No matching records found"
-    },
-        order: [[0, "desc"]],
-        pageLength: 50,
-        processing: true,
-        serverSide: true,
-        searchDelay: 350,
-            ajax: {
-            type: "POST",
-            url: '/Logging/LoadData',
-            datatype: "json",
-        },
-        columns:[
-            { data: "id", name:"Id"},
-            { data: "externalId", name:"ExternalId"},
-            { data: "status", name:"Status"},
-            { data: "createdTime", name:"CreatedTime"},
-            { data: "sentTime", name:"SentTime"},
-            { data: "trackerId", name:"TrackerId"},
-            { data: "openTime", name:"OpenTime"},
-     //       { "data": "iPAddress"},
-            { data: "receiver", name:"Receiver"},
-            { data: "sender", name:"Sender"},
-            { data: "replyTo", name:"ReplyTo"},
-            { data: "subject", name:"Subject"},
-            { data: "body", name:"Body"},
-            { data:null, render: function(data,type,row,meta){
-                return "<td><button id='expand-"+row.id+"' class='btn btn-primary expand'>Visa hela meddelandet</button></td>";		
-            }}
-            ]
-    });
-	
-	$('#searchField').on( 'keyup', function () {
-		table.search( this.value ).draw();
-	});
-	$('body').on('click','.expand', function(){
-		var id = $(this).attr('id').substr(7);
-		$(this).closest('tr').after("<tr><td colspan='7' id='td_"+id+"'>Test</td></tr>");
-		console.log("We Click");
-		$.ajax({    
-			context: this,
-			url: 'ajax.php',                        
-			type : 'POST',
-			data: {'id': id},   
-			error: function(error){
-				console.log(error,"Error in ajax request");
-			},
-			success: function(data)          
-			{
-				console.log("Success of ajax request");
-				console.log(data);
-				$(this).replaceWith("<button id='contract_"+id+"' class='btn btn-danger contract'>Dölj meddelandet</button>");
-				$('#td_'+id).html(data);
-			}
-		});
-	});
-	$('body').on('click', '.contract', function(){
-		var id = $(this).attr('id').substr(9);
-		$('#td_'+id).parent().remove();
-		$(this).replaceWith("<button id='expand_"+id+"' class='btn btn-primary expand'>Visa hela meddelandet</button>");
-	});
-    });
- 
-</script>
+
 <style>
     body {
         color: #292b2c;
     }
-
-    .sorting {
-        background-color: beige;
-        margin-right: 8px;
+    table.dataTable thead .sorting {
+        background-image: none;
     }
-
-    .table th {
-        background-color: #292b2c;
-        color: azure;
-        border-top: 1px solid #eceeef;
-    }
-    .table td {
-        background-color: #dff0d8;
-    }
-
 </style>
 
 <div class="container">
-    <div class="dropdown-header">
+    <div class="header-clearfix">
+        <h3 class="text-muted">Mail-log</h3>
     </div>
+
     <div class="jumbotron">
         <h1 class="display-3">Sök skickade mail</h1>
-        <input id="searchField" type="text" class="form-control form-control-lg" placeholder="Sök" />
+        <input id="searchField" type="text" class="form-control form-control-lg" placeholder="Sök" aria-describedby="sizing-addon1">
     </div>
 </div>
 
@@ -113,88 +36,30 @@
         <div class="row">
             <div class="col-sm-12">
                 <table class="table" id="mailTable">
-                    <thead>
-                    <tr>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Id)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.ExternalId)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Status)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.CreatedTime)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.SentTime)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.TrackerId)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.OpenTime)
-                        </th>                                             
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Receiver)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Sender)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.ReplyTo)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Subject)
-                        </th>
-                        <th class="sorting">
-                            @Html.DisplayNameFor(model => model.Body)
-                        </th>
-                    </tr>
+                    <thead class="thead-dark">
+                        <tr class="bg-success">
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.SentTime)
+                            </th>
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.Receiver)
+                            </th>
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.Sender)
+                            </th>
+                            <th class="sorting">
+                                @Html.DisplayNameFor(model => model.Subject)
+                            </th>
+                            <th>Body</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ExternalId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreatedTime)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SentTime)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TrackerId)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.OpenTime)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Receiver)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Sender)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReplyTo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Subject)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Body)
-                            </td>
-                        </tr>
-                    }
                     </tbody>
                 </table>
             </div>

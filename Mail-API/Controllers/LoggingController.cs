@@ -41,8 +41,8 @@ namespace Mail_API.Controllers
             var length = Request.Form["length"].FirstOrDefault();
             int recordsTotal = 0;
             var dbData = _context.DbMails.AsQueryable();
-            recordsTotal = dbData.Count();
-            var recordsFiltered = dbData.Count();
+            
+
             var jsonData = JsonConvert.SerializeObject(dbData);
             // Sort Column Name  
             var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
@@ -57,16 +57,22 @@ namespace Mail_API.Controllers
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
 
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            // getting all Customer data  
 
-            var data = dbData.Skip(skip).Take(pageSize).AsQueryable();
+            //Search  
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                dbData = dbData.Where(m =>
+                    m.Receiver.Contains(searchValue) || m.Subject.Contains(searchValue) ||
+                    m.Sender.Contains(searchValue) || m.Body.Contains(searchValue));
+            }
+            
+            recordsTotal = dbData.Count();
 
-            //returnera draw, dbdata, recordsTotal och recordsFiltered i jsonformat
-            return Json(new { draw = draw, recordsTotal = recordsTotal, recordsFiltered = recordsFiltered, data = data });
-         
-            
-            
-            //  return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            var recordsFiltered = dbData.Count();
+
+            var data = dbData.Skip(skip).Take(pageSize).Select(m =>new {m.Id, m.SentTime, m.Receiver, m.Sender, m.Subject,m.Status}).ToList();
+
+            return Json(new { draw = draw, recordsTotal = recordsTotal, recordsFiltered = recordsTotal, data = data });
         }
     }
 }

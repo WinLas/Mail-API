@@ -50,7 +50,7 @@ namespace Mail_API.Models.Db
                         Id = 1,
                         Name = "Attachment.txt",
                        // FileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin.eskilsson\Attachment.txt"),
-                        FileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin\Attachment.txt"),
+                        FileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin.eskilsson\Attachment.txt"),
                         MailId = 1
                     }
                 );
