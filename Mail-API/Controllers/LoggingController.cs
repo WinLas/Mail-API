@@ -70,7 +70,7 @@ namespace Mail_API.Controllers
 
             var recordsFiltered = dbData.Count();
 
-            var data = dbData.Skip(skip).Take(pageSize).Select(m =>new {m.Id, m.SentTime, m.Receiver, m.Sender, m.Subject,m.Status}).ToList();
+            var data = dbData.Skip(skip).Take(pageSize).Select(m =>new {m.Id, m.SentTime, m.Receiver, m.Sender, m.Subject, m.Status}).ToList();
 
             return Json(new { draw = draw, recordsTotal = recordsTotal, recordsFiltered = recordsTotal, data = data });
         }

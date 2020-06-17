@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mail;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using MimeKit;
-using SQLitePCL;
 
 namespace Mail_API.Models
 {
@@ -27,7 +22,7 @@ namespace Mail_API.Models
 
         public async Task AddMail (Mail mail)
         {
-            _context.DbMails.Add(mail);
+            _context.DbMails.Add(mail); 
             _context.SaveChanges();
         }
 
@@ -37,7 +32,6 @@ namespace Mail_API.Models
             if (mail.SentTime == null)
             {
                 await SendMail(mail);
-               // Console.WriteLine("Email has been sent");
             }
             else
             {
@@ -66,7 +60,7 @@ namespace Mail_API.Models
         private MimeMessage GetMessage(Mail mail)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("NoReply", mail.Sender));
+            message.From.Add(new MailboxAddress("WinLas", mail.Sender));
             message.To.Add(new MailboxAddress(string.Empty, mail.Receiver));
             message.Subject = "subject";
             message.Body = GetMessageBody(mail).ToMessageBody();
