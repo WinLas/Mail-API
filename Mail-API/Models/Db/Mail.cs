@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Mail;
-using Microsoft.AspNetCore.Http;
 
 namespace Mail_API.Models.Db
 {
