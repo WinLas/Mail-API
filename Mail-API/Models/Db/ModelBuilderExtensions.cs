@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mail_API.Models.Db
 {
@@ -8,7 +12,20 @@ namespace Mail_API.Models.Db
         // Extension method to keep OnModelCreating method clean
         public static void Seed(this ModelBuilder modelBuilder)
         {
-         // add data here, then add-migration and update-database in PMC.
+          //  modelBuilder.Entity<Mail>().HasData(
+             //       new Mail
+             //       {
+                      
+             //       });
+         /*   modelBuilder.Entity<AttachmentFiles>()
+                .HasData(
+                    new AttachmentFiles
+                    {
+                        Id = 1,
+                        Name = "Attachment.txt",
+                        FileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin.eskilsson\Attachment.txt"),
+                        MailId = 1
+                    });  */
         }
     }
 }
