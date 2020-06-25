@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Mail_API.Controllers
 {
     [Route("api/[controller]")]
-  //  [BasicAuth]
+    [BasicAuth]
     [ApiController]
     public class MailController : ControllerBase
     {
