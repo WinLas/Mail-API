@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace MailWorker
@@ -22,10 +21,10 @@ namespace MailWorker
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-
+                  Log.Logger = new LoggerConfiguration()
+                  .ReadFrom.Configuration(configuration)
+                  .CreateLogger();
+                  
             try
             {
                 Log.Information("Worker service starting");
@@ -48,7 +47,7 @@ namespace MailWorker
                 {
                     services.AddHostedService<Worker>();
                     var optionsBuilder = new DbContextOptionsBuilder<MailDbContext>();
-                    optionsBuilder.UseSqlServer(hostContext.Configuration.GetSection("connectionStrings").GetSection("sqlConnection").Value);
+                    optionsBuilder.UseSqlServer(hostContext.Configuration.GetSection("ConnectionStrings").GetSection("sqlConnection").Value);
                     services.AddSingleton(new EmailService(new MailDbContext(optionsBuilder.Options)));
                 });
 

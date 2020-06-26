@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net.Mail;
 
 namespace Mail_API.Models.Db
@@ -20,6 +22,7 @@ namespace Mail_API.Models.Db
         public string Subject { get; set; }
         public string Body { get; set; }
         public string ErrorStatus { get; set; }
+        public List<AttachmentFiles> Files { get; set; }
 
         public void SetPixel(string url)
         {

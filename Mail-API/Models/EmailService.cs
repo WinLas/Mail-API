@@ -33,10 +33,6 @@ namespace Mail_API.Models
             {
                 await SendMail(mail);
             }
-            else
-            {
-               
-            }
         }
 
         private BodyBuilder GetMessageBody(Mail mail)
@@ -50,10 +46,10 @@ namespace Mail_API.Models
             {
                 foreach (AttachmentFiles file in files)
                 {
-                    body.Attachments.Add(file.Name, file.FileBytes);
+                    var fileBytes = Convert.FromBase64String(file.Data);
+                    body.Attachments.Add(file.Name, fileBytes);
                 }
             }
-
             return body;
         }
 
@@ -76,7 +72,7 @@ namespace Mail_API.Models
 
         public async Task<Mail> SendMail(Mail mail)
         {
-            SendRawEmailResponse reply = null;
+            SendRawEmailResponse reply = new SendRawEmailResponse();
 
             using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
             {

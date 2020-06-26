@@ -39,8 +39,7 @@ namespace Mail_API
                 this.Configuration.GetValue<String>("Response:PixelContentType")
         ));
             services.AddScoped<EmailService>();
-            services.AddControllersWithViews();
-            //services.AddControllers(); 
+            services.AddControllers(); 
             services.AddMvc();
 }
 
@@ -59,13 +58,7 @@ namespace Mail_API
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                // Where the files are physicly located
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"js")),
-                // What relative url to serve the files from
-                RequestPath = new PathString("/js")
-            });
+
             app.UseEndpoints(endpoints =>
             {
                 //  endpoints.MapControllers();

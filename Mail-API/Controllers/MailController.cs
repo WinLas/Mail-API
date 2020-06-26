@@ -47,6 +47,10 @@ namespace Mail_API.Controllers
                mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase +
                              Url.Action("getPixel", "Track"));
                await _service.AddMail(mail);
+               foreach (var file in mail.Files)
+               {
+                   file.MailId = mail.Id;
+               }
                return Ok(mail.Id);
            }
            return NotFound("The email must have a receiver, sender and a body.");
