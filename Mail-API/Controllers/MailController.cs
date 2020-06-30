@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Mail_API.Filters;
 using Mail_API.Models;
@@ -30,7 +30,7 @@ namespace Mail_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var mailItem = _service.GetById(id);
+            var mailItem =  _service.GetById(id);
             if(mailItem == null)
             {
                return NotFound("The email with given id could not be found.");

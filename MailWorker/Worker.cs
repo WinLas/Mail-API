@@ -1,15 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Mail_API.Models;
-using Mail_API.Models.Db;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
-using Serilog;
 
 namespace MailWorker
 {

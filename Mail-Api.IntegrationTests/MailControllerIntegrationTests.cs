@@ -1,18 +1,13 @@
 ﻿using Mail_API;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Mail_API.Models.Db;
-using Microsoft.AspNetCore.Razor.Language.Intermediate;
-using Microsoft.Extensions.Configuration.CommandLine;
 using Newtonsoft.Json;
 using Xunit;
 

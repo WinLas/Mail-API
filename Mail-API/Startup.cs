@@ -1,7 +1,4 @@
 using System;
-using System.IO;
-using Amazon.Runtime;
-using Amazon.SimpleEmail;
 using Mail_API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,13 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Swashbuckle.Swagger;
 using Mail_API.Models.Db;
-using Microsoft.AspNetCore.Http;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 namespace Mail_API
 {
