@@ -44,8 +44,7 @@ namespace Mail_API.Controllers
        {
            if (mail.IsValid())
            {
-               mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase +
-                             Url.Action("getPixel", "Track"));
+               mail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase);
                await _service.AddMail(mail);
                foreach (var file in mail.Files)
                {
