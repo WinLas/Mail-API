@@ -53,6 +53,6 @@ namespace Mail_API
 {
     public enum MailStatus
     {
-        Unsent = 0, Sent = 1, Error = 2, Opened = 3, Invalid
+        Unsent = 0, Sent = 1, Error = 2, Opened = 3, Invalid = 4
     }
 }
