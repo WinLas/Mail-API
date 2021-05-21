@@ -23,7 +23,7 @@ namespace Mail_API.Controllers
             var start = Request.Form["start"].FirstOrDefault();
             var length = Request.Form["length"].FirstOrDefault();
             int recordsTotal = 0;
-            var dbData = _context.DbMails.AsQueryable();
+            var dbData = _context.Mails.AsQueryable();
          
             // Search Value from (Search box)  
             var searchValue = Request.Form["search"].FirstOrDefault();

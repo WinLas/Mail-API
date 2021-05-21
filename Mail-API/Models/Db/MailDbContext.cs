@@ -10,8 +10,8 @@ namespace Mail_API.Models.Db
         {
         }
 
-        public DbSet<Mail> DbMails { get; set; }
-        public DbSet<AttachmentFiles> DbFiles { get; set; }
+        public DbSet<Mail> Mails { get; set; }
+        public DbSet<AttachmentFiles> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

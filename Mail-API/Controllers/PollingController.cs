@@ -27,7 +27,7 @@ namespace Mail_API.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowStatus([FromBody] Polling polling)
         {
-            var dbMail = _context.DbMails.Select(m => new { m.Id, m.Status }).Where(m => polling.Id.Contains(m.Id)).ToList();
+            var dbMail = _context.Mails.Select(m => new { m.Id, m.Status }).Where(m => polling.Id.Contains(m.Id)).ToList();
 
             if (polling.Id.Length != 0 || dbMail.Any(m => polling.Id.Contains(m.Id)))
             {

@@ -34,10 +34,10 @@ namespace Mail_API.Controllers
                await Task.Factory.StartNew((data) =>
             {
                 var dataDictionary = data as IDictionary<string, StringValues>;
-                var dbMail = _context.DbMails.FirstOrDefault(m => m.TrackerId.Equals(trackingId));
+                var dbMail = _context.Mails.FirstOrDefault(m => m.TrackerId.Equals(trackingId));
                 dbMail.OpenTime = DateTime.Now;
                 dbMail.Status = MailStatus.Opened;
-                _context.DbMails.Update(dbMail);
+                _context.Mails.Update(dbMail);
                 _context.SaveChanges();
 
             }, parameters.Union(headers).ToDictionary(k => k.Key, v => v.Value)).ConfigureAwait(false);

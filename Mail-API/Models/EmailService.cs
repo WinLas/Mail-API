@@ -22,13 +22,13 @@ namespace Mail_API.Models
 
         public async Task AddMail (Mail mail)
         {
-            _context.DbMails.Add(mail); 
+            _context.Mails.Add(mail); 
             _context.SaveChanges();
         }
 
         public async Task SendUnsentMail()
         {
-            var mail = _context.DbMails.FirstOrDefault(m => m.SentTime == null);
+            var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
             if (mail.SentTime == null)
             {
                 await SendMail(mail);
@@ -41,12 +41,12 @@ namespace Mail_API.Models
             {
                 HtmlBody = mail.Body,
             };
-            var files = _context.DbFiles.Where(f => mail.Id == f.MailId).ToList();
+            var files = _context.Files.Where(f => mail.Id == f.MailId).ToList();
             if (files.Count > 0)
             {
                 foreach (AttachmentFiles file in files)
                 {
-                    var fileBytes = Convert.FromBase64String(file.Data);
+                    var fileBytes = Convert.FromBase64String(file.FilePath);
                     body.Attachments.Add(file.Name, fileBytes);
                 }
             }
@@ -81,7 +81,7 @@ namespace Mail_API.Models
                 mail.ExternalId = reply.MessageId;
                 mail.SentTime = DateTime.Now;
                 mail.Status = MailStatus.Sent;
-                _context.DbMails.Update(mail);
+                _context.Mails.Update(mail);
                 _context.SaveChanges();
             }
             return mail;
@@ -89,22 +89,22 @@ namespace Mail_API.Models
 
         public IEnumerable<Mail> GetAllMails()
         { 
-            var allMails = _context.DbMails.OrderByDescending(m => m.CreatedTime).Take(100).ToList();
+            var allMails = _context.Mails.OrderByDescending(m => m.CreatedTime).Take(100).ToList();
             return allMails;
         }
 
         public Mail GetById(int id)
         { 
-            var mailItem = _context.DbMails.Find(id);
+            var mailItem = _context.Mails.Find(id);
             return mailItem;
         }
 
         public Mail UpdateMail(Mail mail)
         {
-            var dbMail = _context.DbMails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
+            var dbMail = _context.Mails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
             dbMail.Status = (MailStatus)2;
             dbMail.ErrorStatus = mail.ErrorStatus;
-            _context.DbMails.Update(dbMail);
+            _context.Mails.Update(dbMail);
             _context.SaveChanges();
             return dbMail;
         }
