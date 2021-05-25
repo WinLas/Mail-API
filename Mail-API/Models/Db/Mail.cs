@@ -21,6 +21,7 @@ namespace Mail_API.Models.Db
         public string Subject { get; set; }
         public string Body { get; set; }
         public string ErrorStatus { get; set; }
+        public bool DontSend { get; set; }
 
         public void SetPixel(string url)
         {

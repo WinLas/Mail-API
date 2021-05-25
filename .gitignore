@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+Mail-API/Migrations/
+Mail-API/uploads/
+
 # User-specific files
 *.rsuser
 *.suo

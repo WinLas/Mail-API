@@ -64,6 +64,11 @@ namespace Mail_API.Controllers
                        CreatedTime = DateTime.Now,
                        Subject = mail.Subject,
                    };
+                   if (mail.DontSend)
+                   {
+                       dbMail.DontSend = true;
+                       dbMail.SentTime = DateTime.Now;
+                   }
                    if (dbMail.IsValid())
                    {
                        dbMail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase);
