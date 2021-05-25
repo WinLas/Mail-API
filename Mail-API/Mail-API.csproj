@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210520132725_MailApi1.cs" />
     <Compile Remove="Migrations\20210520132725_MailApi1.Designer.cs" />
+    <Compile Remove="Migrations\20210525123542_testa.cs" />
+    <Compile Remove="Migrations\20210525123542_testa.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +43,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.0.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
   </ItemGroup>

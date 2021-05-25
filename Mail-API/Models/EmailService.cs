@@ -7,6 +7,8 @@ using Amazon;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
+using Mail_API.Models.Dto;
+using Microsoft.EntityFrameworkCore;
 using MimeKit;
 
 namespace Mail_API.Models
@@ -29,9 +31,12 @@ namespace Mail_API.Models
         public async Task SendUnsentMail()
         {
             var mail = _context.Mails.FirstOrDefault(m => m.SentTime == null);
-            if (mail.SentTime == null)
+            if (mail != null)
             {
-                await SendMail(mail);
+                if (mail.SentTime == null)
+                {
+                    await SendMail(mail);
+                }
             }
         }
 
@@ -41,15 +46,24 @@ namespace Mail_API.Models
             {
                 HtmlBody = mail.Body,
             };
-            var files = _context.Files.Where(f => mail.Id == f.MailId).ToList();
+            var files = GetFilesForMail(mail.Id);
             if (files.Count > 0)
             {
                 foreach (AttachmentFiles file in files)
                 {
-                    var fileBytes = Convert.FromBase64String(file.FilePath);
-                    body.Attachments.Add(file.Name, fileBytes);
+                    try
+                    {
+                        var fileBytes = File.ReadAllBytes(file.FilePath);
+                        body.Attachments.Add(file.Name, fileBytes);
+                    }
+                    catch (Exception e)
+                    {
+                        // logga fel 
+                    }
+
                 }
             }
+         
             return body;
         }
 
@@ -70,6 +84,23 @@ namespace Mail_API.Models
             return stream;
         }
 
+        public AttachmentFiles GetFile(int fileId)
+        {
+            return _context.Files.FirstOrDefault(x=>x.Id == fileId);
+        }
+
+        public List<AttachmentFiles> GetFilesForMail(int mailId)
+        {
+            var files = _context.MailFile.Where(x => x.MailId == mailId).ToList();
+            List<AttachmentFiles> attachmentFiles = new List<AttachmentFiles>();
+            foreach (var mailfile in files)
+            {
+                var file = GetFile(mailfile.FileId);
+                attachmentFiles.Add(file);
+            }
+            return attachmentFiles.ToList();
+        }
+
         public async Task<Mail> SendMail(Mail mail)
         {
             SendRawEmailResponse reply = new SendRawEmailResponse();
@@ -85,6 +116,12 @@ namespace Mail_API.Models
                 _context.SaveChanges();
             }
             return mail;
+        }
+
+        internal void SaveAttachment(AttachmentFiles file)
+        {
+            _context.Files.Add(file);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Mail> GetAllMails()
@@ -107,6 +144,12 @@ namespace Mail_API.Models
             _context.Mails.Update(dbMail);
             _context.SaveChanges();
             return dbMail;
+        }
+
+        internal void SaveMailIdFileId(MailIdFileId mailFile)
+        {
+            _context.MailFile.Add(mailFile);
+            _context.SaveChanges();
         }
     }
 }

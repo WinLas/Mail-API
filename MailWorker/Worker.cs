@@ -25,11 +25,11 @@ namespace MailWorker
                 try
                 {
                     await _service.SendUnsentMail();
-                    _logger.LogInformation("Email has been sent");
                 }
                 catch (Exception e)
                 {
-                    _logger.LogInformation("No emails in queue");
+                    _logger.LogInformation(e.Message);
+                    _logger.LogInformation(e.StackTrace);
                 }
                 
                 await Task.Delay(5000, stoppingToken);

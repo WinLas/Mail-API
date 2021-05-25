@@ -20,7 +20,6 @@ namespace Mail_API.Models.Db
                         Id = 1,
                         Name = "Attachment.txt",
                         fileBytes = System.IO.File.ReadAllBytes(@"C:\Users\robin.eskilsson\Attachment.txt"),
-                        MailId = 1
                     });  */
         }
     }

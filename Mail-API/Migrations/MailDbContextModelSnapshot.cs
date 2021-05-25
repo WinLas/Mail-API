@@ -29,15 +29,10 @@ namespace Mail_API.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MailId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MailId");
 
                     b.ToTable("Files");
                 });
@@ -93,13 +88,22 @@ namespace Mail_API.Migrations
                     b.ToTable("Mails");
                 });
 
-            modelBuilder.Entity("Mail_API.Models.Db.AttachmentFiles", b =>
+            modelBuilder.Entity("Mail_API.Models.Db.MailIdFileId", b =>
                 {
-                    b.HasOne("Mail_API.Models.Db.Mail", null)
-                        .WithMany("Files")
-                        .HasForeignKey("MailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MailFile");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,10 +12,10 @@ namespace Mail_API.Models.Db
 
         public DbSet<Mail> Mails { get; set; }
         public DbSet<AttachmentFiles> Files { get; set; }
+        public DbSet<MailIdFileId> MailFile { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Seed();
         }
     }
 }
