@@ -139,14 +139,17 @@ namespace Mail_API.Models
         public Mail UpdateMail(Mail mail)
         {
             var dbMail = _context.Mails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
-            if (mail.ExternalId != null && dbMail.ExternalId == mail.ExternalId)
+            if (dbMail != null)
             {
-                dbMail.Status = (MailStatus)2;
-                dbMail.ErrorStatus = mail.ErrorStatus;
-                _context.Mails.Update(dbMail);
-                _context.SaveChanges();
+                if (!string.IsNullOrEmpty(mail.ExternalId) && dbMail.ExternalId == mail.ExternalId)
+                {
+                    dbMail.Status = (MailStatus)2;
+                    dbMail.ErrorStatus = mail.ErrorStatus;
+                    _context.Mails.Update(dbMail);
+                    _context.SaveChanges();
 
-                return dbMail;
+                    return dbMail;
+                }
             }
             return null;
         }
