@@ -105,7 +105,7 @@ namespace Mail_API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(AwsMailDto mailDto)
         {
-            if (mailDto.BounceType == "permanent")
+            if (mailDto.BounceType != "permanent")
             {
                 return Ok(mailDto);
             }
