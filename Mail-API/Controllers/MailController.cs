@@ -103,15 +103,19 @@ namespace Mail_API.Controllers
 
         // PUT: api/Mail/5
         [HttpPut]
-        public async Task<IActionResult> Put(Mail mail)
+        public async Task<IActionResult> Put(AwsMailDto mailDto)
         {
-            var dbMail = _service.UpdateMail(mail);
-            if (dbMail == null)
+            if (mailDto.BounceType == "permanent")
+            {
+                return Ok(mailDto);
+            }
+            var mail = _service.UpdateMail(mailDto);
+            if (mail == null)
             {
                 return NotFound("The email with given external id could not be found.");
             }
 
-            return Ok(dbMail);
+            return Ok(mail);
         }
     }
 }

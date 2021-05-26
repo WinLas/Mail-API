@@ -136,7 +136,14 @@ namespace Mail_API.Models
             return mailItem;
         }
 
-        public Mail UpdateMail(Mail mail)
+        public Mail GetByExternalId(string externalId)
+        {
+            var mailItem = _context.Mails.Find(externalId);
+            return mailItem;
+        }
+
+
+        public Mail UpdateMail(AwsMailDto mail)
         {
             var dbMail = _context.Mails.FirstOrDefault(m => m.ExternalId.Equals(mail.ExternalId));
             if (dbMail != null)
