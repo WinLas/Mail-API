@@ -108,7 +108,7 @@ namespace Mail_API.Controllers
             var dbMail = _service.UpdateMail(mail);
             if (dbMail == null)
             {
-                return NotFound("The email with given id could not be found.");
+                return NotFound("The email with given external id could not be found.");
             }
 
             return Ok(dbMail);
