@@ -50,13 +50,13 @@ namespace Mail_API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<RequestLoggingMiddleware>();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
