@@ -16,6 +16,12 @@ namespace Mail_API.Controllers
             _context = context;
         }
 
+        public string GetIpAddressOfClient()
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            return ip;
+        }
+
         [HttpPost]
         public async Task<IActionResult> LoadData()
         {

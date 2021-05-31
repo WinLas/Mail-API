@@ -27,25 +27,24 @@ namespace Mail_API.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowStatus([FromBody] Polling polling)
         {
-            var dbMail = _context.Mails.Select(m => new { m.Id, m.Status }).Where(m => polling.Id.Contains(m.Id)).ToList();
+            var dbMail = _context.Mails.Select(m => new { m.Id, m.Status,m.ErrorStatus }).Where(m => polling.Id.Contains(m.Id)).ToList();
 
-            if (polling.Id.Length != 0 || dbMail.Any(m => polling.Id.Contains(m.Id)))
-            {
-             
-                for (int i= 0; i <= polling.Id.Length-1; i++)
+                if (polling.Id.Length != 0 || dbMail.Any(m => polling.Id.Contains(m.Id)))
                 {
-                    var findId = dbMail.Where(m => polling.Id[i].Equals(m.Id));
 
-                    if (!findId.Any())
+                    for (int i = 0; i <= polling.Id.Length - 1; i++)
                     {
-                        dbMail.Add(new {Id = polling.Id[i], Status = MailStatus.Invalid});
+                        var findId = dbMail.Where(m => polling.Id[i].Equals(m.Id));
+
+                        if (!findId.Any())
+                        {
+                            dbMail.Add(new { Id = polling.Id[i], Status = MailStatus.Invalid, ErrorStatus = "Invalid mail Id" });
+                        }
                     }
+
+                    return Ok(dbMail);
                 }
-
-                return Ok(dbMail);
-            }
-
-            return NotFound("You have to enter a valid mail Id");
+                return NotFound("You have to enter a valid mail Id");
         }
     }
 }
