@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.Runtime;
+using Amazon.Runtime.CredentialManagement;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using Mail_API.Models.Db;
@@ -105,7 +107,12 @@ namespace Mail_API.Models
         {
             SendRawEmailResponse reply = new SendRawEmailResponse();
 
-            using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1))
+            var chain = new
+                CredentialProfileStoreChain(Directory.GetCurrentDirectory()+ "\\creds\\credentials");
+            AWSCredentials awsCredentials;
+            chain.TryGetAWSCredentials("default", out awsCredentials);
+
+            using (var client = new AmazonSimpleEmailServiceClient(awsCredentials, RegionEndpoint.EUWest1))
             {
                 var sendRequest = new SendRawEmailRequest{RawMessage = new RawMessage(GetMessageStream(mail))};
                 reply = await client.SendRawEmailAsync(sendRequest);

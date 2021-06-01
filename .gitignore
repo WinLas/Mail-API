@@ -5,6 +5,7 @@
 
 Mail-API/Migrations/
 Mail-API/uploads/
+MailWorker/creds/
 
 # User-specific files
 *.rsuser
