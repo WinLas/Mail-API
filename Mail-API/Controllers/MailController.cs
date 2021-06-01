@@ -78,7 +78,7 @@ namespace Mail_API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm]MailDto mail, IEnumerable<IFormFile> files)
        {
-           if (!string.IsNullOrEmpty(mail.Sender) || mail.Receivers.Count > 0 || !string.IsNullOrEmpty(mail.Body))
+           if (!string.IsNullOrEmpty(mail.Sender) && mail.Receivers.Count > 0 && !string.IsNullOrEmpty(mail.Body))
            {
                foreach (var receiver in mail.Receivers)
                {
