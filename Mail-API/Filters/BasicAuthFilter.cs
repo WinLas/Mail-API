@@ -53,7 +53,7 @@ namespace Mail_API.Filters
 
         public bool IsAuthorized(AuthorizationFilterContext context, string username, string password)
         {
-            var jsonString = File.ReadAllText("cred.json");
+            var jsonString = File.ReadAllText(Directory.GetCurrentDirectory() + "\\cred.json");
            var myJsonObject = JObject.Parse(jsonString);
            return (username == myJsonObject.GetValue("username").ToString()) && (password == myJsonObject.GetValue("password").ToString());
         }
