@@ -32,6 +32,7 @@ namespace Mail_API.Controllers
             _hostingEnvironment = environment;
             _logger = logger;
         }
+
         // GET: api/Mail
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -47,8 +48,7 @@ namespace Mail_API.Controllers
           }
           catch (Exception e)
           {
-              Console.WriteLine(e);
-   //           _logger.Error(e.ToString());
+              _logger.Error(e.StackTrace);
               return NotFound("No emails could be found");
           }
       }
@@ -68,7 +68,7 @@ namespace Mail_API.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e.StackTrace);
                 throw;
             }
 
@@ -78,70 +78,87 @@ namespace Mail_API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromForm]MailDto mail, IEnumerable<IFormFile> files)
        {
-           if (!string.IsNullOrEmpty(mail.Sender) && mail.Receivers.Count > 0 && !string.IsNullOrEmpty(mail.Body))
+           try
            {
-               foreach (var receiver in mail.Receivers)
-               {
-                   var dbMail = new Mail
-                   {
-                       Sender = mail.Sender,
-                       Receiver = receiver,
-                       Body = mail.Body,
-                       CreatedTime = DateTime.Now,
-                       Subject = mail.Subject,
-                   };
-                   if (mail.DontSend)
-                   {
-                       dbMail.DontSend = true;
-                       dbMail.SentTime = DateTime.Now;
-                   }
-                   if (dbMail.IsValid())
-                   {
-                       dbMail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase);
-                       await _service.AddMail(dbMail);
-                       if (files != null)
-                       {
-                           foreach (var file in files)
-                           {
-                               var hash = Guid.NewGuid().ToString("N");
-                               var filePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "uploads"), hash);
-                               using (var fileStream = new FileStream(filePath, FileMode.Create)) await file.CopyToAsync(fileStream);
-                               var dbFile = new AttachmentFiles
-                               {
-                                   FilePath = filePath,
-                                   Name = file.FileName
-                               };
-                               _service.SaveAttachment(dbFile);
-                               var mailIdFileId = new MailIdFileId
-                               {
-                                   MailId = dbMail.Id,
-                                   FileId = dbFile.Id
-                               };
-                               _service.SaveMailIdFileId(mailIdFileId);
-                           }
-                       }
-                   }
-               }
-               return Ok(mail);
+                if (!string.IsNullOrEmpty(mail.Sender) && mail.Receivers.Count > 0 && !string.IsNullOrEmpty(mail.Body))
+                {
+                    foreach (var receiver in mail.Receivers)
+                    {
+                        var dbMail = new Mail
+                        {
+                            Sender = mail.Sender,
+                            Receiver = receiver,
+                            Body = mail.Body,
+                            CreatedTime = DateTime.Now,
+                            Subject = mail.Subject,
+                        };
+                        if (mail.DontSend)
+                        {
+                            dbMail.DontSend = true;
+                            dbMail.SentTime = DateTime.Now;
+                        }
+                        if (dbMail.IsValid())
+                        {
+                            dbMail.SetPixel(Request.Scheme + "://" + Request.Host + Request.PathBase);
+                            await _service.AddMail(dbMail);
+                            if (files != null)
+                            {
+                                foreach (var file in files)
+                                {
+                                    var hash = Guid.NewGuid().ToString("N");
+                                    var filePath = Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "uploads"), hash);
+                                    using (var fileStream = new FileStream(filePath, FileMode.Create)) await file.CopyToAsync(fileStream);
+                                    var dbFile = new AttachmentFiles
+                                    {
+                                        FilePath = filePath,
+                                        Name = file.FileName
+                                    };
+                                    _service.SaveAttachment(dbFile);
+                                    var mailIdFileId = new MailIdFileId
+                                    {
+                                        MailId = dbMail.Id,
+                                        FileId = dbFile.Id
+                                    };
+                                    _service.SaveMailIdFileId(mailIdFileId);
+                                }
+                            }
+                        }
+                    }
+                    return Ok(mail);
+                }
+                return NotFound("The email must have a receiver, sender and a body.");
            }
-           return NotFound("The email must have a receiver, sender and a body.");
+           catch (Exception e)
+           {
+                _logger.Error(e.StackTrace);
+                throw;
+           }
+
        }
 
         // PUT: api/Mail/5
         [HttpPut]
         public async Task<IActionResult> Put(AwsMailDto mailDto)
         {
-            if (mailDto.BounceType != "permanent")
+            try
             {
-                return Ok(mailDto);
+                if (mailDto.BounceType != "permanent")
+                {
+                    return Ok(mailDto);
+                }
+                var mail = _service.UpdateMail(mailDto);
+                if (mail == null)
+                {
+                    return NotFound("The email with given external id could not be found.");
+                }
+                return Ok(mail);
             }
-            var mail = _service.UpdateMail(mailDto);
-            if (mail == null)
+            catch (Exception e)
             {
-                return NotFound("The email with given external id could not be found.");
+                _logger.Error(e.StackTrace);
+                throw;
             }
 
-            return Ok(mail);
         }
     }
 }
