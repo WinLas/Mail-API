@@ -56,8 +56,7 @@ namespace Mail_API.Models.Logging
                                    $"Host: {context.Request.Host} " +
                                    $"Path: {context.Request.Path} " +
                                    $"IpAddress: {context.Connection.RemoteIpAddress.ToString()} " +
-                                   $"QueryString: {context.Request.QueryString.Value} " +
-                                   $"Request Body: {ReadStreamInChunks(requestStream)}");
+                                   $"QueryString: {context.Request.QueryString.Value} ");
             context.Request.Body.Position = 0;
         }
 
@@ -75,8 +74,7 @@ namespace Mail_API.Models.Logging
                                    $"Host: {context.Request.Host} " +
                                    $"Path: {context.Request.Path} " +
                                    $"IpAddress: {context.Connection.RemoteIpAddress.ToString()} " +
-                                   $"QueryString: {context.Request.QueryString.Value} " +
-                                   $"Response Body: {text}");
+                                   $"QueryString: {context.Request.QueryString.Value} ");
             await responseBody.CopyToAsync(originalBodyStream);
         }
 
