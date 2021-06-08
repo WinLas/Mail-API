@@ -37,6 +37,7 @@ namespace Mail_API
                 this.Configuration.GetValue<String>("Response:PixelContentType")
         ));
             services.AddScoped<EmailService>();
+            services.AddScoped<APIService>();
             services.AddControllers(); 
             services.AddMvc();
             services.AddSingleton<ILog, Models.Logging.NLog>();
@@ -49,6 +50,7 @@ namespace Mail_API
             {
                 app.UseDeveloperExceptionPage();
             }
+
 
             app.UseHttpsRedirection();
 

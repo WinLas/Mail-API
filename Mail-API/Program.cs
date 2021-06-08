@@ -2,8 +2,10 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Mail_API.Entities;
+using Mail_API.Models.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Security;
 
 
 namespace Mail_API

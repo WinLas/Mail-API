@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using Mail_API.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Mail_API.Filters
@@ -12,9 +13,12 @@ namespace Mail_API.Filters
     public class BasicAuthFilter : IAuthorizationFilter
     {
         private readonly string _realm;
-        public BasicAuthFilter(string realm)
+        private readonly APIService _apiService;
+
+        public BasicAuthFilter(string realm, APIService apiService)
         {
             _realm = realm;
+            _apiService = apiService;
             if (string.IsNullOrWhiteSpace(_realm))
             {
                 throw new ArgumentNullException(nameof(realm), @"Please provide a non-empty realm value.");
@@ -31,14 +35,10 @@ namespace Mail_API.Filters
                     if (authHeaderValue.Scheme.Equals(AuthenticationSchemes.Basic.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         var credentials = Encoding.UTF8
-                                            .GetString(Convert.FromBase64String(authHeaderValue.Parameter ?? string.Empty))
-                                            .Split(':', 2);
-                        if (credentials.Length == 2)
+                            .GetString(Convert.FromBase64String(authHeaderValue.Parameter ?? string.Empty));
+                        if (IsAuthorized(context, credentials))
                         {
-                            if (IsAuthorized(context, credentials[0], credentials[1]))
-                            {
                                 return;
-                            }
                         }
                     }
                 }
@@ -51,11 +51,12 @@ namespace Mail_API.Filters
             }
         }
 
-        public bool IsAuthorized(AuthorizationFilterContext context, string username, string password)
+        public bool IsAuthorized(AuthorizationFilterContext context, string username)
         {
-            var jsonString = File.ReadAllText(Directory.GetCurrentDirectory() + "\\cred.json");
-           var myJsonObject = JObject.Parse(jsonString);
-           return (username == myJsonObject.GetValue("username").ToString()) && (password == myJsonObject.GetValue("password").ToString());
+            return _apiService.VerifyKey(username);
+            //   var jsonString = File.ReadAllText(Directory.GetCurrentDirectory() + "\\cred.json");
+            // var myJsonObject = JObject.Parse(jsonString);
+            //  return (username == myJsonObject.GetValue("username").ToString());
         }
 
         private void ReturnUnauthorizedResult(AuthorizationFilterContext context)
