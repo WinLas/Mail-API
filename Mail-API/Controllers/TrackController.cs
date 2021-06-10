@@ -8,7 +8,7 @@ using Mail_API.Models.Db;
 
 namespace Mail_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class TrackController : ControllerBase
     {

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Mail_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     
     public class PollingController : ControllerBase
     {

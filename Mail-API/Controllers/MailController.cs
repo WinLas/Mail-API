@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mail_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [BasicAuth]
     [ApiController]
   //  [Produces("application/json")]
